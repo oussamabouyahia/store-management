@@ -4,6 +4,7 @@ import "@testing-library/jest-dom";
 
 describe("OneProduct Component", () => {
   const mockEditProduct = vi.fn();
+  //product sample
   const product = {
     id: 1,
     name: "Sample Product",
@@ -16,7 +17,7 @@ describe("OneProduct Component", () => {
   test("renders product details correctly", () => {
     render(<OneProduct product={product} editProduct={mockEditProduct} />);
 
-    expect(screen.getByText(/sample product/i)).toBeInTheDocument(); // Case-insensitive match
+    expect(screen.getByText(/sample product/i)).toBeInTheDocument();
     expect(screen.getByText(/10.99/)).toBeInTheDocument(); // Matches numbers as string
     expect(screen.getByText(/5/)).toBeInTheDocument();
     expect(screen.getByText(/category a/i)).toBeInTheDocument(); // Case-insensitive
