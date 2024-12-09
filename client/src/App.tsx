@@ -6,6 +6,7 @@ import ProductEdit from "./components/ProductEdit";
 import Products from "./Pages/Products";
 import Home from "./Pages/Home";
 import ErrorPage from "./Pages/ErrorPage";
+import AddProduct from "./components/AddProduct";
 
 function App() {
   return (
@@ -16,6 +17,7 @@ function App() {
           <Route path="products" element={<Products />}>
             <Route index element={<Product />} />
             <Route path="edit/:id" element={<ProductEdit />} />
+            <Route path="addProduct" element={<AddProduct />} />
           </Route>
           <Route path="*" element={<ErrorPage />} />
         </Routes>
