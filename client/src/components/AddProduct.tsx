@@ -1,4 +1,29 @@
+import { useState } from "react";
+import Button from "./Button";
+import { handleInputChange } from "../utils/inputHandler";
+import axios from "axios";
 const AddProduct = () => {
+  const initialState = {
+    name: "",
+    price: 0,
+    quantity: 0,
+    category: "",
+    storage_location: "",
+  };
+  const [product, setProduct] = useState(initialState);
+  const [errors, setErrors] = useState({ name: "", price: "", quantity: "" });
+
+  const newProduct = () => {
+    axios
+      .post("http://localhost:8080/product", product)
+      .then((res) => {
+        alert(res.data.message);
+        setProduct(initialState);
+      })
+      .catch((err) => {
+        if (err.response) alert(err.response.data.message);
+      });
+  };
   return (
     <div className="max-w-4xl mx-auto mt-10 p-6 bg-white shadow-lg rounded-lg">
       <h2 className="text-2xl font-bold text-gray-800 mb-6 text-center">
@@ -14,12 +39,17 @@ const AddProduct = () => {
           Product Name
         </label>
         <input
+          value={product.name}
           type="text"
           id="name"
           name="name"
           className="w-full px-4 py-2 border border-gray-300 rounded-lg shadow-sm focus:ring-blue-500 focus:border-blue-500"
           placeholder="Enter product name"
+          onChange={handleInputChange(setProduct, setErrors)}
         />
+        {errors.name && (
+          <p className="text-red-500 text-sm mt-2">{errors.name}</p>
+        )}
       </div>
 
       {/* <!-- Price --> */}
@@ -31,12 +61,17 @@ const AddProduct = () => {
           Price
         </label>
         <input
+          value={product.price}
           type="number"
           id="price"
           name="price"
           className="w-full px-4 py-2 border border-gray-300 rounded-lg shadow-sm focus:ring-blue-500 focus:border-blue-500"
-          placeholder="Enter product price"
+          placeholder="Enter a valid product price"
+          onChange={handleInputChange(setProduct, setErrors)}
         />
+        {errors.price && (
+          <p className="text-red-500 text-sm mt-2">{errors.price}</p>
+        )}
       </div>
 
       {/* <!-- Quantity --> */}
@@ -48,12 +83,17 @@ const AddProduct = () => {
           Quantity
         </label>
         <input
+          value={product.quantity}
           type="number"
           id="quantity"
           name="quantity"
           className="w-full px-4 py-2 border border-gray-300 rounded-lg shadow-sm focus:ring-blue-500 focus:border-blue-500"
-          placeholder="Enter product quantity"
+          placeholder="Enter a valid product quantity"
+          onChange={handleInputChange(setProduct, setErrors)}
         />
+        {errors.quantity && (
+          <p className="text-red-500 text-sm mt-2">{errors.quantity}</p>
+        )}
       </div>
 
       {/* <!-- Category --> */}
@@ -65,17 +105,19 @@ const AddProduct = () => {
           Category
         </label>
         <select
+          value={product.category}
+          onChange={handleInputChange(setProduct, setErrors)}
           id="category"
           name="category"
           className="w-full px-4 py-2 border border-gray-300 rounded-lg shadow-sm focus:ring-blue-500 focus:border-blue-500"
         >
-          <option value="" disabled selected>
+          <option value="" disabled>
             Select a category
           </option>
-          <option value="electronics">Electronics</option>
-          <option value="clothing">Clothing</option>
-          <option value="books">Books</option>
-          <option value="other">Other</option>
+          <option value="pen">pen</option>
+          <option value="chaiers">chaiers</option>
+          <option value="book">book</option>
+          <option value="others">others</option>
         </select>
       </div>
       {/* storage_location */}
@@ -87,6 +129,8 @@ const AddProduct = () => {
           Storage Location
         </label>
         <input
+          value={product.storage_location}
+          onChange={handleInputChange(setProduct, setErrors)}
           type="text"
           id="storage_location"
           name="storage_location"
@@ -96,14 +140,13 @@ const AddProduct = () => {
       </div>
       {/* 
   // Submit Button  */}
-      <div className="flex justify-center">
-        <button
-          type="submit"
-          className="px-6 py-2 bg-blue-500 text-white font-semibold rounded-lg shadow-md hover:bg-blue-600 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:ring-offset-2"
-        >
-          Add Product
-        </button>
-      </div>
+      <Button
+        text="add product"
+        onClick={newProduct}
+        isDisabled={
+          product.name.length < 3 || product.price <= 0 || product.quantity <= 0
+        }
+      />
     </div>
   );
 };
