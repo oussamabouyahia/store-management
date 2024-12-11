@@ -2,6 +2,7 @@ import { useState } from "react";
 import Button from "./Button";
 import { handleInputChange } from "../utils/inputHandler";
 import axios from "axios";
+import Alert from "./Alert";
 const AddProduct = () => {
   const initialState = {
     name: "",
@@ -12,20 +13,32 @@ const AddProduct = () => {
   };
   const [product, setProduct] = useState(initialState);
   const [errors, setErrors] = useState({ name: "", price: "", quantity: "" });
+  const [alert, setAlert] = useState<{
+    message: string;
+    color: "red" | "green";
+  }>({ color: "green", message: "" });
 
   const newProduct = () => {
     axios
       .post("http://localhost:8080/product", product)
       .then((res) => {
-        alert(res.data.message);
+        setAlert({ message: res.data.message, color: "green" });
         setProduct(initialState);
+        setTimeout(() => {
+          setAlert({ message: "", color: "green" });
+        }, 2000);
       })
       .catch((err) => {
-        if (err.response) alert(err.response.data.message);
+        if (err.response)
+          setAlert({ message: err.response.data.message, color: "red" });
+        setTimeout(() => {
+          setAlert({ message: "", color: "green" });
+        }, 2000);
       });
   };
   return (
     <div className="max-w-4xl mx-auto mt-10 p-6 bg-white shadow-lg rounded-lg">
+      {alert.message && <Alert message={alert.message} color={alert.color} />}
       <h2 className="text-2xl font-bold text-gray-800 mb-6 text-center">
         Add New Product
       </h2>
