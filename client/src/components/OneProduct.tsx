@@ -2,8 +2,9 @@ import { ProductType } from "../types/productType";
 interface OneProductProps {
   product: ProductType;
   editProduct: (id: number) => void;
+  sellProduct: (id: number) => void;
 }
-const OneProduct = ({ product, editProduct }: OneProductProps) => {
+const OneProduct = ({ product, editProduct, sellProduct }: OneProductProps) => {
   return (
     <tr className="even:bg-gray-50 hover:bg-gray-100">
       <td className="p-2 border border-gray-300">{product.id}</td>
@@ -19,9 +20,15 @@ const OneProduct = ({ product, editProduct }: OneProductProps) => {
       <td className="p-2 border border-gray-300 text-center">
         <button
           onClick={() => editProduct(product.id)}
-          className="px-3 py-1 text-white bg-blue-500 rounded hover:bg-blue-600 focus:outline-none"
+          className="px-3 py-1 mr-2 text-white bg-blue-500 rounded hover:bg-blue-600 focus:outline-none"
         >
           Edit
+        </button>
+        <button
+          onClick={() => sellProduct(product.id)}
+          className="px-3 py-1 text-white bg-blue-500 rounded hover:bg-blue-600 focus:outline-none"
+        >
+          Sell
         </button>
       </td>
     </tr>
