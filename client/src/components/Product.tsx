@@ -4,8 +4,11 @@ import { useNavigate } from "react-router";
 import Pagination from "./Pagination";
 import OneProduct from "./OneProduct";
 import Search from "./Search";
+import TableHead from "./TableHead";
 const Product = () => {
   const [products, setProducts] = useState<ProductType[]>([]);
+  const [card, setCard] = useState([]); // card array will include products by id with their quantity
+  const [quantity, setquantity] = useState(0); // quantity per product added to card
   const [loading, setLoading] = useState(true);
   const [errors, setErrors] = useState({ status: false, message: "" });
   const [page, setPage] = useState({ first: 0, last: 4 });
@@ -30,6 +33,7 @@ const Product = () => {
       state: products.find((product: ProductType) => product.id === id),
     });
   };
+  const sellProduct = (id: number) => {};
   const previousPage = () => {
     setPage((prev) => ({
       first: Math.max(prev.first - 4, 0),
@@ -64,35 +68,11 @@ const Product = () => {
         <Search setSearch={setSearch} />
 
         <table className="table-auto w-full border-collapse border border-gray-200 shadow-sm">
-          <thead className="bg-gray-100 text-gray-800">
-            <tr>
-              <th className="p-2 border border-gray-300 text-left">ID</th>
-              <th className="p-2 border border-gray-300 text-left">Name</th>
-              <th className="p-2 border border-gray-300 text-left">Price</th>
-              <th className="p-2 border border-gray-300 text-left">Quantity</th>
-              <th className="p-2 border border-gray-300 text-left">
-                <select
-                  className="px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-blue-500"
-                  name="category"
-                  value={category}
-                  onChange={(e) => setCategory(e.target.value)}
-                >
-                  <option value="All Categories">All Categories</option>
-                  {categories.map((cat) => (
-                    <option key={cat} value={cat}>
-                      {cat}
-                    </option>
-                  ))}
-                </select>
-              </th>
-              <th className="p-2 border border-gray-300 text-left">
-                Storage Location
-              </th>
-              <th className="p-2 border border-gray-300 text-center">
-                Actions
-              </th>
-            </tr>
-          </thead>
+          <TableHead
+            categories={categories}
+            category={category}
+            setCategory={setCategory}
+          />
           <tbody>
             {products
               .filter((product) => {
@@ -110,6 +90,7 @@ const Product = () => {
                     key={product.id}
                     product={product}
                     editProduct={editProduct}
+                    sellProduct={sellProduct}
                   />
                 );
               })}
