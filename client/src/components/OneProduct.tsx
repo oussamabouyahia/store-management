@@ -1,10 +1,19 @@
 import { ProductType } from "../types/productType";
+import { Dispatch, SetStateAction } from "react";
 interface OneProductProps {
   product: ProductType;
   editProduct: (id: number) => void;
   sellProduct: (id: number) => void;
+  setQuantity: Dispatch<SetStateAction<number>>;
+  quantity: number;
 }
-const OneProduct = ({ product, editProduct, sellProduct }: OneProductProps) => {
+const OneProduct = ({
+  product,
+  editProduct,
+  sellProduct,
+  setQuantity,
+  quantity,
+}: OneProductProps) => {
   return (
     <tr className="even:bg-gray-50 hover:bg-gray-100">
       <td className="p-2 border border-gray-300">{product.id}</td>
@@ -32,6 +41,8 @@ const OneProduct = ({ product, editProduct, sellProduct }: OneProductProps) => {
         </button>
 
         <input
+          value={quantity}
+          onChange={(e) => setQuantity(Number(e.target.value))}
           type="number"
           className="ml-2 w-20 px-3 py-2 border border-blue-300 rounded-md shadow-sm focus:ring-green-500 focus:border-red-500"
         />

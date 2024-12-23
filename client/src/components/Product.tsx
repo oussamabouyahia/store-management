@@ -5,10 +5,12 @@ import Pagination from "./Pagination";
 import OneProduct from "./OneProduct";
 import Search from "./Search";
 import TableHead from "./TableHead";
+import { CardType } from "../types/productType";
+import Card from "./Card";
 const Product = () => {
   const [products, setProducts] = useState<ProductType[]>([]);
-  const [card, setCard] = useState([]); // card array will include products by id with their quantity
-  const [quantity, setquantity] = useState(0); // quantity per product added to card
+  const [card, setCard] = useState<CardType[]>([]); // card array will include products by id with their quantity
+  const [quantity, setQuantity] = useState(0); // quantity per product added to card
   const [loading, setLoading] = useState(true);
   const [errors, setErrors] = useState({ status: false, message: "" });
   const [page, setPage] = useState({ first: 0, last: 4 });
@@ -33,7 +35,13 @@ const Product = () => {
       state: products.find((product: ProductType) => product.id === id),
     });
   };
-  const sellProduct = (id: number) => {};
+  const sellProduct = (id: number, name: string) => {
+    setCard((prev) => [
+      ...prev,
+      { productId: id, name: name, quantity: quantity },
+    ]);
+    setQuantity(0);
+  };
   const previousPage = () => {
     setPage((prev) => ({
       first: Math.max(prev.first - 4, 0),
@@ -88,9 +96,11 @@ const Product = () => {
                 return (
                   <OneProduct
                     key={product.id}
+                    quantity={quantity}
                     product={product}
                     editProduct={editProduct}
-                    sellProduct={sellProduct}
+                    sellProduct={() => sellProduct(product.id, product.name)}
+                    setQuantity={setQuantity}
                   />
                 );
               })}
@@ -102,6 +112,10 @@ const Product = () => {
           nextPage={nextPage}
           products={products}
         />
+
+        {card.length > 0 && (
+          <Card setCard={setCard} card={card} setQuantity={setQuantity} />
+        )}
       </div>
     </div>
   );

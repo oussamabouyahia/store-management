@@ -6,3 +6,9 @@ export interface ProductType {
   category: string;
   storage_location?: string;
 }
+
+export interface CardType {
+  productId: number;
+  quantity: number;
+  name: string;
+}
