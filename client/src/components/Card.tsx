@@ -1,6 +1,7 @@
-import { Dispatch, SetStateAction } from "react";
+import { Dispatch, SetStateAction, useState } from "react";
 import { CardType } from "../types/productType";
 import axios from "axios";
+import ConfirmDialog from "./ConfirmDialog";
 
 interface CardProps {
   card: CardType[];
@@ -8,6 +9,7 @@ interface CardProps {
 }
 
 const Card = ({ card, setCard }: CardProps) => {
+  const [showDialog, setShowDialog] = useState(false);
   const incrementQuantity = (id: number) => {
     setCard((prev) =>
       prev.map((item: CardType) => {
@@ -42,7 +44,10 @@ const Card = ({ card, setCard }: CardProps) => {
           quantity: item.quantity,
         })),
       })
-      .then((res) => alert(res.data.message))
+      .then((res) => {
+        alert(res.data.message);
+        setCard([]);
+      })
       .catch((error) => alert(error.message));
   };
 
@@ -101,10 +106,18 @@ const Card = ({ card, setCard }: CardProps) => {
         </h4>
         <button
           className="mt-4 w-full px-4 py-2 bg-green-500 text-white rounded-lg hover:bg-green-600 focus:ring-2 focus:ring-green-300 transition"
-          onClick={sellProcess}
+          onClick={() => setShowDialog(true)}
         >
           Proceed with Selling
         </button>
+        {showDialog && (
+          <ConfirmDialog
+            title="selling process"
+            message="are you sure to proceed to sell with this card"
+            onConfirm={sellProcess}
+            onCancel={() => setShowDialog(false)}
+          />
+        )}
       </div>
     </div>
   );
