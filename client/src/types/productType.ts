@@ -11,4 +11,5 @@ export interface CardType {
   productId: number;
   quantity: number;
   name: string;
+  price: number;
 }

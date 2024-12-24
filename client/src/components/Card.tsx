@@ -1,12 +1,13 @@
 import { Dispatch, SetStateAction } from "react";
 import { CardType } from "../types/productType";
+import axios from "axios";
 
 interface CardProps {
   card: CardType[];
   setCard: Dispatch<SetStateAction<CardType[]>>;
-  setQuantity: Dispatch<SetStateAction<number>>;
 }
-const Card = ({ card, setCard, setQuantity }: CardProps) => {
+
+const Card = ({ card, setCard }: CardProps) => {
   const incrementQuantity = (id: number) => {
     setCard((prev) =>
       prev.map((item: CardType) => {
@@ -17,6 +18,7 @@ const Card = ({ card, setCard, setQuantity }: CardProps) => {
       })
     );
   };
+
   const decrementQuantity = (id: number) => {
     setCard((prev) =>
       prev.map((item: CardType) => {
@@ -28,40 +30,84 @@ const Card = ({ card, setCard, setQuantity }: CardProps) => {
     );
   };
 
+  const totalAmount = card.reduce((t, item) => {
+    t += item.quantity * item.price;
+    return Number(t.toFixed(2));
+  }, 0);
+  const sellProcess = () => {
+    axios
+      .post("http://localhost:8080/sale", {
+        products: card.map((item) => ({
+          productId: item.productId,
+          quantity: item.quantity,
+        })),
+      })
+      .then((res) => alert(res.data.message))
+      .catch((error) => alert(error.message));
+  };
+
   return (
-    <div className="mt-6 p-4 border rounded-lg shadow-md bg-gray-100 hover:bg-gray-200 transition duration-300">
+    <div className="mt-6 p-6 border rounded-lg shadow-lg bg-gray-50">
+      <h2 className="text-xl font-bold text-gray-800 mb-4">Your Cart</h2>
       {card.map((product) => (
-        <div key={product.productId}>
-          <h3 className="text-lg font-bold text-gray-800">{product.name}</h3>
-          {/* <p className="text-sm text-gray-600">ID: {product.productId}</p> */}
-          <p className="text-sm text-gray-600">Quantity: {product.quantity}</p>
-          <div className="flex space-x-2 mt-3 mb-3">
-            <button
-              className="px-3 py-1 bg-blue-500 text-white rounded-lg hover:bg-blue-600 focus:ring-2 focus:ring-blue-300 transition"
-              onClick={() => incrementQuantity(product.productId)}
-            >
-              +
-            </button>
-            <button
-              className="px-3 py-1 bg-red-500 text-white rounded-lg hover:bg-red-600 focus:ring-2 focus:ring-red-300 transition"
-              onClick={() => decrementQuantity(product.productId)}
-            >
-              -
-            </button>
-            <button
-              className="px-4 py-1 bg-gray-500 text-white rounded-lg hover:bg-gray-600 focus:ring-2 focus:ring-gray-300 transition"
-              onClick={() =>
-                setCard((prev) =>
-                  prev.filter((item) => item.productId !== product.productId)
-                )
-              }
-            >
-              Delete
-            </button>
+        <div
+          key={product.productId}
+          className="mb-1 p-4 bg-blue-50 rounded-md shadow-md "
+        >
+          <h3 className="text-lg font-semibold text-gray-700">
+            {product.name}
+          </h3>
+          <div className="flex justify-between items-center mt-2">
+            <div>
+              <p className="text-sm text-gray-600">
+                Quantity:{" "}
+                <span className="font-medium">{product.quantity}</span>
+              </p>
+              <p className="text-sm text-gray-600">
+                Price: <span className="font-medium">${product.price}</span>
+              </p>
+            </div>
+            <div className="flex space-x-2">
+              <button
+                className="px-3 py-1 bg-blue-500 text-white rounded-md hover:bg-blue-600 focus:ring-2 focus:ring-blue-300 transition"
+                onClick={() => incrementQuantity(product.productId)}
+              >
+                +
+              </button>
+              <button
+                className="px-3 py-1 bg-red-500 text-white rounded-md hover:bg-red-600 focus:ring-2 focus:ring-red-300 transition"
+                onClick={() => decrementQuantity(product.productId)}
+              >
+                -
+              </button>
+              <button
+                className="px-4 py-1 bg-gray-500 text-white rounded-md hover:bg-gray-600 focus:ring-2 focus:ring-gray-300 transition"
+                onClick={() =>
+                  setCard((prev) =>
+                    prev.filter((item) => item.productId !== product.productId)
+                  )
+                }
+              >
+                Delete
+              </button>
+            </div>
           </div>
         </div>
       ))}
+      <div className="mt-6 p-4 bg-gray-200 rounded-md">
+        <h4 className="text-lg font-semibold text-gray-700">
+          Total Amount:{" "}
+          <span className="text-green-600">{totalAmount.toFixed(2)} TND</span>
+        </h4>
+        <button
+          className="mt-4 w-full px-4 py-2 bg-green-500 text-white rounded-lg hover:bg-green-600 focus:ring-2 focus:ring-green-300 transition"
+          onClick={sellProcess}
+        >
+          Proceed with Selling
+        </button>
+      </div>
     </div>
   );
 };
+
 export default Card;

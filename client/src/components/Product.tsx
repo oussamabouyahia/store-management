@@ -35,10 +35,18 @@ const Product = () => {
       state: products.find((product: ProductType) => product.id === id),
     });
   };
-  const sellProduct = (id: number, name: string) => {
+  const sellProduct = (id: number, name: string, price: number) => {
+    if (card.find((item) => item.productId === id)) {
+      alert("this product already in the card");
+      return;
+    }
+    if (quantity === 0) {
+      alert("quantity should be positive ");
+      return;
+    }
     setCard((prev) => [
       ...prev,
-      { productId: id, name: name, quantity: quantity },
+      { productId: id, name: name, quantity: quantity, price: price },
     ]);
     setQuantity(0);
   };
@@ -99,7 +107,9 @@ const Product = () => {
                     quantity={quantity}
                     product={product}
                     editProduct={editProduct}
-                    sellProduct={() => sellProduct(product.id, product.name)}
+                    sellProduct={() =>
+                      sellProduct(product.id, product.name, product.price)
+                    }
                     setQuantity={setQuantity}
                   />
                 );
@@ -113,9 +123,7 @@ const Product = () => {
           products={products}
         />
 
-        {card.length > 0 && (
-          <Card setCard={setCard} card={card} setQuantity={setQuantity} />
-        )}
+        {card.length > 0 && <Card setCard={setCard} card={card} />}
       </div>
     </div>
   );
