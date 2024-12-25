@@ -64,6 +64,12 @@ const Product = () => {
     }));
   };
   const categories = [...new Set(products.map((product) => product.category))];
+  const filteredProduct = products.filter((product) => {
+    return (
+      (category === "All Categories" || product.category === category) &&
+      product.name.toLowerCase().includes(search.toLowerCase())
+    );
+  });
 
   if (errors.status)
     return (
@@ -90,30 +96,20 @@ const Product = () => {
             setCategory={setCategory}
           />
           <tbody>
-            {products
-              .filter((product) => {
-                if (category === "All Categories") return product;
-                return product.category === category;
-              })
-              .filter((product) =>
-                product.name.toLowerCase().includes(search.toLowerCase())
-              )
-
-              .slice(page.first, page.last)
-              .map((product) => {
-                return (
-                  <OneProduct
-                    key={product.id}
-                    quantity={quantity}
-                    product={product}
-                    editProduct={editProduct}
-                    sellProduct={() =>
-                      sellProduct(product.id, product.name, product.price)
-                    }
-                    setQuantity={setQuantity}
-                  />
-                );
-              })}
+            {filteredProduct.slice(page.first, page.last).map((product) => {
+              return (
+                <OneProduct
+                  key={product.id}
+                  quantity={quantity}
+                  product={product}
+                  editProduct={editProduct}
+                  sellProduct={() =>
+                    sellProduct(product.id, product.name, product.price)
+                  }
+                  setQuantity={setQuantity}
+                />
+              );
+            })}
           </tbody>
         </table>
         <Pagination

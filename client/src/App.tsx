@@ -1,5 +1,5 @@
 // import "./App.css";
-
+import { useContext } from "react";
 import { Route, Routes } from "react-router";
 import Product from "./components/Product";
 import ProductEdit from "./components/ProductEdit";
@@ -7,11 +7,18 @@ import Products from "./Pages/Products";
 import Home from "./Pages/Home";
 import ErrorPage from "./Pages/ErrorPage";
 import AddProduct from "./components/AddProduct";
-
+import Alert from "./components/Alert";
+import { AlertContext } from "./contexts/AlertContext";
 function App() {
+  const { activeAlert } = useContext(AlertContext);
   return (
     <>
       <div>
+        {activeAlert.show && (
+          <div className="container mx-auto p-4">
+            <Alert message={activeAlert.message} color={activeAlert.color} />
+          </div>
+        )}
         <Routes>
           <Route path="/" element={<Home />} />
           <Route path="products" element={<Products />}>

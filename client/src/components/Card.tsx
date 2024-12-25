@@ -52,7 +52,7 @@ const Card = ({ card, setCard }: CardProps) => {
   };
 
   return (
-    <div className="mt-6 p-6 border rounded-lg shadow-lg bg-gray-50">
+    <div className="mt-6 p-6 border rounded-lg shadow-lg bg-gray-50 w-1/2 mx-auto">
       <h2 className="text-xl font-bold text-gray-800 mb-4">Your Cart</h2>
       {card.map((product) => (
         <div
