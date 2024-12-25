@@ -9,11 +9,13 @@ import ErrorPage from "./Pages/ErrorPage";
 import AddProduct from "./components/AddProduct";
 import Alert from "./components/Alert";
 import { AlertContext } from "./contexts/AlertContext";
+import Header from "./components/Header";
 function App() {
   const { activeAlert } = useContext(AlertContext);
   return (
     <>
       <div>
+        <Header />
         {activeAlert.show && (
           <div className="container mx-auto p-4">
             <Alert message={activeAlert.message} color={activeAlert.color} />
