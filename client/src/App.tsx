@@ -10,6 +10,8 @@ import AddProduct from "./components/AddProduct";
 import Alert from "./components/Alert";
 import { AlertContext } from "./contexts/AlertContext";
 import Header from "./components/Header";
+import Invoice from "./components/Invoice";
+import "./App.css";
 function App() {
   const { activeAlert } = useContext(AlertContext);
   return (
@@ -27,6 +29,7 @@ function App() {
             <Route index element={<Product />} />
             <Route path="edit/:id" element={<ProductEdit />} />
             <Route path="addProduct" element={<AddProduct />} />
+            <Route path="invoice" element={<Invoice />} />
           </Route>
           <Route path="*" element={<ErrorPage />} />
         </Routes>

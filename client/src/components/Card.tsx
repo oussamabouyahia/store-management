@@ -4,6 +4,8 @@ import axios from "axios";
 import ConfirmDialog from "./ConfirmDialog";
 import { AlertContext } from "../contexts/AlertContext";
 import useCardLogic from "../custom Hooks/useCardLogic";
+import { useNavigate } from "react-router";
+import Button from "./Button";
 
 interface CardProps {
   card: CardType[];
@@ -12,30 +14,10 @@ interface CardProps {
 
 const Card = ({ card, setCard }: CardProps) => {
   const [showDialog, setShowDialog] = useState(false);
+  const [clientName, setClientName] = useState("");
   const { setActiveAlert } = useContext(AlertContext);
   const { incrementQuantity, decrementQuantity } = useCardLogic(setCard);
-  // const incrementQuantity = (id: number) => {
-  //   setCard((prev) =>
-  //     prev.map((item: CardType) => {
-  //       if (item.productId === id) {
-  //         return { ...item, quantity: item.quantity + 1 };
-  //       }
-  //       return item;
-  //     })
-  //   );
-  // };
-
-  // const decrementQuantity = (id: number) => {
-  //   setCard((prev) =>
-  //     prev.map((item: CardType) => {
-  //       if (item.productId === id && item.quantity > 1) {
-  //         return { ...item, quantity: item.quantity - 1 };
-  //       }
-  //       return item;
-  //     })
-  //   );
-  // };
-
+  const navigate = useNavigate();
   const totalAmount = card.reduce((t, item) => {
     t += item.quantity * item.price;
     return Number(t.toFixed(2));
@@ -47,6 +29,7 @@ const Card = ({ card, setCard }: CardProps) => {
           productId: item.productId,
           quantity: item.quantity,
         })),
+        clientName,
       })
       .then((res) => {
         setActiveAlert({
@@ -54,7 +37,9 @@ const Card = ({ card, setCard }: CardProps) => {
           color: "green",
           show: true,
         });
-        setCard([]);
+        navigate("/Products/invoice", {
+          state: { card, totalAmount, clientName },
+        });
       })
       .catch((error) => {
         setActiveAlert({ message: error.message, color: "red", show: true });
@@ -64,6 +49,13 @@ const Card = ({ card, setCard }: CardProps) => {
   return (
     <div className="mt-6 p-6 border rounded-lg shadow-lg bg-gray-50 w-1/2 mx-auto">
       <h2 className="text-xl font-bold text-gray-800 mb-4">Your Cart</h2>
+      <input
+        type="text"
+        value={clientName}
+        className="m-2 px-3 py-2 border border-blue-300 rounded-md shadow-sm focus:ring-green-500 focus:border-red-500"
+        placeholder="client"
+        onChange={(e) => setClientName(e.target.value)}
+      />
       {card.map((product) => (
         <div
           key={product.productId}
@@ -114,12 +106,18 @@ const Card = ({ card, setCard }: CardProps) => {
           Total Amount:{" "}
           <span className="text-green-600">{totalAmount.toFixed(2)} TND</span>
         </h4>
-        <button
+
+        {/* <button
           className="mt-4 w-full px-4 py-2 bg-green-500 text-white rounded-lg hover:bg-green-600 focus:ring-2 focus:ring-green-300 transition"
           onClick={() => setShowDialog(true)}
         >
           Proceed with Selling
-        </button>
+        </button> */}
+        <Button
+          text="Proceed with selling"
+          isDisabled={clientName.trim().length < 5}
+          onClick={() => setShowDialog(true)}
+        />
         {showDialog && (
           <ConfirmDialog
             title="selling process"
