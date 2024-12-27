@@ -7,7 +7,7 @@ const Header = () => {
         {/* Logo */}
         <h1 className="text-xl font-bold">
           <NavLink to="/" className="hover:text-gray-300">
-            Store Manager
+            Library Store Management
           </NavLink>
         </h1>
 
@@ -46,12 +46,12 @@ const Header = () => {
             Payments
           </NavLink>
           <NavLink
-            to="/clients"
+            to="/products/addProduct"
             className={({ isActive }) =>
               `hover:text-gray-300 ${isActive ? "text-yellow-400" : ""}`
             }
           >
-            Clients
+            Add Product
           </NavLink>
           <NavLink
             to="/reports"

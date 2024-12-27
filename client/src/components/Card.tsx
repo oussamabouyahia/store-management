@@ -1,7 +1,9 @@
-import { Dispatch, SetStateAction, useState } from "react";
+import { Dispatch, SetStateAction, useContext, useState } from "react";
 import { CardType } from "../types/productType";
 import axios from "axios";
 import ConfirmDialog from "./ConfirmDialog";
+import { AlertContext } from "../contexts/AlertContext";
+import useCardLogic from "../custom Hooks/useCardLogic";
 
 interface CardProps {
   card: CardType[];
@@ -10,27 +12,29 @@ interface CardProps {
 
 const Card = ({ card, setCard }: CardProps) => {
   const [showDialog, setShowDialog] = useState(false);
-  const incrementQuantity = (id: number) => {
-    setCard((prev) =>
-      prev.map((item: CardType) => {
-        if (item.productId === id) {
-          return { ...item, quantity: item.quantity + 1 };
-        }
-        return item;
-      })
-    );
-  };
+  const { setActiveAlert } = useContext(AlertContext);
+  const { incrementQuantity, decrementQuantity } = useCardLogic(setCard);
+  // const incrementQuantity = (id: number) => {
+  //   setCard((prev) =>
+  //     prev.map((item: CardType) => {
+  //       if (item.productId === id) {
+  //         return { ...item, quantity: item.quantity + 1 };
+  //       }
+  //       return item;
+  //     })
+  //   );
+  // };
 
-  const decrementQuantity = (id: number) => {
-    setCard((prev) =>
-      prev.map((item: CardType) => {
-        if (item.productId === id && item.quantity > 1) {
-          return { ...item, quantity: item.quantity - 1 };
-        }
-        return item;
-      })
-    );
-  };
+  // const decrementQuantity = (id: number) => {
+  //   setCard((prev) =>
+  //     prev.map((item: CardType) => {
+  //       if (item.productId === id && item.quantity > 1) {
+  //         return { ...item, quantity: item.quantity - 1 };
+  //       }
+  //       return item;
+  //     })
+  //   );
+  // };
 
   const totalAmount = card.reduce((t, item) => {
     t += item.quantity * item.price;
@@ -45,10 +49,16 @@ const Card = ({ card, setCard }: CardProps) => {
         })),
       })
       .then((res) => {
-        alert(res.data.message);
+        setActiveAlert({
+          message: res.data.message,
+          color: "green",
+          show: true,
+        });
         setCard([]);
       })
-      .catch((error) => alert(error.message));
+      .catch((error) => {
+        setActiveAlert({ message: error.message, color: "red", show: true });
+      });
   };
 
   return (

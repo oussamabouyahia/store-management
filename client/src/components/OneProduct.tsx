@@ -37,7 +37,7 @@ const OneProduct = ({
           onClick={() => sellProduct(product.id)}
           className="px-3 py-1 text-white bg-blue-500 rounded hover:bg-blue-600 focus:outline-none"
         >
-          Sell
+          add to card
         </button>
 
         <input
