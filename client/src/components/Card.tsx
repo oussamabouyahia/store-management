@@ -107,12 +107,6 @@ const Card = ({ card, setCard }: CardProps) => {
           <span className="text-green-600">{totalAmount.toFixed(2)} TND</span>
         </h4>
 
-        {/* <button
-          className="mt-4 w-full px-4 py-2 bg-green-500 text-white rounded-lg hover:bg-green-600 focus:ring-2 focus:ring-green-300 transition"
-          onClick={() => setShowDialog(true)}
-        >
-          Proceed with Selling
-        </button> */}
         <Button
           text="Proceed with selling"
           isDisabled={clientName.trim().length < 5}
