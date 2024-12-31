@@ -1,10 +1,39 @@
 import { useLocation } from "react-router";
 import { CardType } from "../types/productType";
-
+import axios from "axios";
+import { useContext, useState } from "react";
+import { AlertContext } from "../contexts/AlertContext";
 const Invoice = () => {
+  const [amount, setAmount] = useState(0); //amount to be paid by the client
   const location = useLocation();
-  const { card, totalAmount, clientName } = location.state;
-
+  const { card, totalAmount, clientName, saleId } = location.state;
+  const { setActiveAlert } = useContext(AlertContext);
+  const payment = () => {
+    try {
+      axios
+        .post("http://localhost:8080/payment", { amount, clientName, saleId })
+        .then((res) => {
+          if (res.status == 201)
+            setActiveAlert({
+              message: `${res.data.message} , amount paid ${res.data.payment}`,
+              show: true,
+              color: "green",
+            });
+          else
+            setActiveAlert({
+              message: `${res.data.message} `,
+              show: true,
+              color: "red",
+            });
+        });
+    } catch (error) {
+      setActiveAlert({
+        message: `error occured `,
+        show: true,
+        color: "red",
+      });
+    }
+  };
   return (
     <div
       id="invoice-container"
@@ -25,6 +54,16 @@ const Invoice = () => {
               {clientName || "N/A"}
             </span>
           </p>
+          <div>
+            <label htmlFor="paid"> Paid</label>
+            <input
+              id="paid"
+              className="ml-2 w-20 px-3 py-2 border border-blue-300 rounded-md shadow-sm focus:ring-green-500 focus:border-red-500"
+              type="number"
+              min={0}
+              onChange={(e) => setAmount(Number(e.target.value))}
+            />
+          </div>
         </div>
       </header>
 
@@ -83,14 +122,23 @@ const Invoice = () => {
       <footer className="text-center mt-10 text-sm text-gray-500">
         <p>Thank you for your business!</p>
         <p className="mt-1">Oussama Library</p>
+        <div className="flex">
+          <button
+            onClick={() => window.print()}
+            id="printButton"
+            className="mb-4 px-4 py-2 bg-blue-500 text-white rounded-lg hover:bg-blue-600"
+          >
+            Print Invoice
+          </button>
+          <button
+            onClick={payment}
+            id="paymentButton"
+            className="mb-4 px-4 py-2 bg-blue-500 text-white rounded-lg hover:bg-blue-600"
+          >
+            Payment
+          </button>
+        </div>
       </footer>
-      <button
-        onClick={() => window.print()}
-        id="printButton"
-        className="mb-4 px-4 py-2 bg-blue-500 text-white rounded-lg hover:bg-blue-600"
-      >
-        Print Invoice
-      </button>
     </div>
   );
 };

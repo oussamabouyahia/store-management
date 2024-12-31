@@ -37,8 +37,9 @@ const Card = ({ card, setCard }: CardProps) => {
           color: "green",
           show: true,
         });
+        const saleId = res.data.saleId;
         navigate("/Products/invoice", {
-          state: { card, totalAmount, clientName },
+          state: { card, totalAmount, clientName, saleId },
         });
       })
       .catch((error) => {
@@ -109,7 +110,7 @@ const Card = ({ card, setCard }: CardProps) => {
 
         <Button
           text="Proceed with selling"
-          isDisabled={clientName.trim().length < 5}
+          isDisabled={clientName.length < 5}
           onClick={() => setShowDialog(true)}
         />
         {showDialog && (
