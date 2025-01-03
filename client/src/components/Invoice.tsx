@@ -3,6 +3,7 @@ import { CardType } from "../types/productType";
 import axios from "axios";
 import { useContext, useState } from "react";
 import { AlertContext } from "../contexts/AlertContext";
+import Button from "./Button";
 const Invoice = () => {
   const [amount, setAmount] = useState(0); //amount to be paid by the client
   const location = useLocation();
@@ -54,16 +55,6 @@ const Invoice = () => {
               {clientName || "N/A"}
             </span>
           </p>
-          <div>
-            <label htmlFor="paid"> Paid</label>
-            <input
-              id="paid"
-              className="ml-2 w-20 px-3 py-2 border border-blue-300 rounded-md shadow-sm focus:ring-green-500 focus:border-red-500"
-              type="number"
-              min={0}
-              onChange={(e) => setAmount(Number(e.target.value))}
-            />
-          </div>
         </div>
       </header>
 
@@ -115,28 +106,45 @@ const Invoice = () => {
               {totalAmount.toFixed(2)} TND
             </span>
           </div>
+          <div className="flex justify-between items-center mt-2">
+            <label htmlFor="paid"> Paid</label>
+            <input
+              id="paid"
+              className="ml-2 w-20 px-3 py-2 border border-blue-300 rounded-md shadow-sm focus:ring-green-500 focus:border-red-500"
+              type="number"
+              min={0}
+              onChange={(e) => setAmount(Number(e.target.value))}
+            />
+          </div>
+          <div className="flex justify-between items-center mt-2">
+            <span className="text-sm text-gray-600">left:</span>
+            <span className="text-lg font-medium text-gray-800">
+              {(totalAmount - amount).toFixed(2)} TND
+            </span>
+          </div>
         </div>
       </div>
 
       {/* Footer */}
       <footer className="text-center mt-10 text-sm text-gray-500">
-        <p>Thank you for your business!</p>
-        <p className="mt-1">Oussama Library</p>
-        <div className="flex">
-          <button
+        <div
+          className="flex justify-center items-center w-1/2 mx-auto mt-6 space-x-4"
+          id="printButton"
+        >
+          <Button
             onClick={() => window.print()}
-            id="printButton"
-            className="mb-4 px-4 py-2 bg-blue-500 text-white rounded-lg hover:bg-blue-600"
-          >
-            Print Invoice
-          </button>
-          <button
+            isDisabled={!amount}
+            text="Print Invoice"
+          />
+          <Button
             onClick={payment}
-            id="paymentButton"
-            className="mb-4 px-4 py-2 bg-blue-500 text-white rounded-lg hover:bg-blue-600"
-          >
-            Payment
-          </button>
+            text="Payment"
+            isDisabled={!amount || !clientName}
+          />
+        </div>
+        <div>
+          <p>Thank you for your business!</p>
+          <p className="mt-1">Oussama Library</p>
         </div>
       </footer>
     </div>

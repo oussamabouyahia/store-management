@@ -33,10 +33,10 @@ const clientHistoryPayment = async (req, res) => {
       return res.status(400).send("client name should be provided!");
     const sales = await SalesSummary.findAll({
       where: { client_name: clientName },
-      order: [["sale_date", "DESC"]], // Order by most recent sale first
+      order: [["sale_date", "DESC"]], // Order from recent sale to old sale
       include: [
         {
-          model: Payment, // Include payments for each sale
+          model: Payment, // Include payments (array) for each sale
           as: "payments",
           attributes: ["amount_paid", "payment_date"], // Fetch specific fields
         },

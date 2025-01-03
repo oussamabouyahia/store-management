@@ -12,6 +12,7 @@ import { AlertContext } from "./contexts/AlertContext";
 import Header from "./components/Header";
 import Invoice from "./components/Invoice";
 import "./App.css";
+import ClientPayments from "./components/ClientPayments";
 function App() {
   const { activeAlert } = useContext(AlertContext);
   return (
@@ -25,6 +26,7 @@ function App() {
         )}
         <Routes>
           <Route path="/" element={<Home />} />
+          <Route path="/pay" element={<ClientPayments />} />
           <Route path="products" element={<Products />}>
             <Route index element={<Product />} />
             <Route path="edit/:id" element={<ProductEdit />} />
