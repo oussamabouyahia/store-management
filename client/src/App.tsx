@@ -13,8 +13,11 @@ import Header from "./components/Header";
 import Invoice from "./components/Invoice";
 import "./App.css";
 import ClientPayments from "./components/ClientPayments";
+import ProtectedRoute from "./components/ProtectedRoute";
+import { clientContext } from "./contexts/ClientContext";
 function App() {
   const { activeAlert } = useContext(AlertContext);
+  const { client } = useContext(clientContext);
   return (
     <>
       <div>
@@ -26,7 +29,15 @@ function App() {
         )}
         <Routes>
           <Route path="/" element={<Home />} />
-          <Route path="/payments" element={<ClientPayments />} />
+          <Route
+            path="/payments"
+            element={
+              <ProtectedRoute
+                children={<ClientPayments />}
+                condition={client.length > 0}
+              />
+            }
+          />
           <Route path="products" element={<Products />}>
             <Route index element={<Product />} />
             <Route path="edit/:id" element={<ProductEdit />} />
