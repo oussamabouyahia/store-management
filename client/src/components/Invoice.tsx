@@ -5,36 +5,36 @@ import { useContext, useState } from "react";
 import { AlertContext } from "../contexts/AlertContext";
 import Button from "./Button";
 const Invoice = () => {
-  const [amount, setAmount] = useState(0); //amount to be paid by the client
+  // const [amount, setAmount] = useState(0); //amount to be paid by the client
   const location = useLocation();
   const { card, totalAmount, clientName, saleId } = location.state;
   const { setActiveAlert } = useContext(AlertContext);
-  const payment = () => {
-    try {
-      axios
-        .post("http://localhost:8080/payment", { amount, clientName, saleId })
-        .then((res) => {
-          if (res.status == 201)
-            setActiveAlert({
-              message: `${res.data.message} , amount paid ${res.data.payment}`,
-              show: true,
-              color: "green",
-            });
-          else
-            setActiveAlert({
-              message: `${res.data.message} `,
-              show: true,
-              color: "red",
-            });
-        });
-    } catch (error) {
-      setActiveAlert({
-        message: `error occured `,
-        show: true,
-        color: "red",
-      });
-    }
-  };
+  // const payment = () => {
+  //   try {
+  //     axios
+  //       .post("http://localhost:8080/payment", { amount, clientName, saleId })
+  //       .then((res) => {
+  //         if (res.status == 201)
+  //           setActiveAlert({
+  //             message: `${res.data.message} , amount paid ${res.data.payment}`,
+  //             show: true,
+  //             color: "green",
+  //           });
+  //         else
+  //           setActiveAlert({
+  //             message: `${res.data.message} `,
+  //             show: true,
+  //             color: "red",
+  //           });
+  //       });
+  //   } catch (error) {
+  //     setActiveAlert({
+  //       message: `error occured `,
+  //       show: true,
+  //       color: "red",
+  //     });
+  //   }
+  // };
   return (
     <div
       id="invoice-container"
@@ -106,7 +106,7 @@ const Invoice = () => {
               {totalAmount.toFixed(2)} TND
             </span>
           </div>
-          <div className="flex justify-between items-center mt-2">
+          {/* <div className="flex justify-between items-center mt-2">
             <label htmlFor="paid"> Paid</label>
             <input
               id="paid"
@@ -115,13 +115,13 @@ const Invoice = () => {
               min={0}
               onChange={(e) => setAmount(Number(e.target.value))}
             />
-          </div>
-          <div className="flex justify-between items-center mt-2">
+          </div> */}
+          {/* <div className="flex justify-between items-center mt-2">
             <span className="text-sm text-gray-600">left:</span>
             <span className="text-lg font-medium text-gray-800">
               {(totalAmount - amount).toFixed(2)} TND
             </span>
-          </div>
+          </div> */}
         </div>
       </div>
 
@@ -133,13 +133,8 @@ const Invoice = () => {
         >
           <Button
             onClick={() => window.print()}
-            isDisabled={!amount}
+            isDisabled={!clientName}
             text="Print Invoice"
-          />
-          <Button
-            onClick={payment}
-            text="Payment"
-            isDisabled={!amount || !clientName}
           />
         </div>
         <div>

@@ -1,4 +1,5 @@
-import { useState, useEffect } from "react";
+import { useState, useEffect, useContext } from "react";
+import { clientContext } from "../contexts/ClientContext";
 
 interface Sale {
   id: number;
@@ -26,7 +27,7 @@ const ClientPayments = () => {
   const [sales, setSales] = useState<Sale[]>([]);
   const [payment, setPayment] = useState<PaymentDetails[]>([]);
   const [showDetails, setShowDetails] = useState({ status: false, id: -1 });
-  const client = "new client";
+  const { client } = useContext(clientContext);
 
   useEffect(() => {
     fetch(`http://localhost:8080/payment/${client}`)

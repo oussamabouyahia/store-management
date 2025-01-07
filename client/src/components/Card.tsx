@@ -6,6 +6,7 @@ import { AlertContext } from "../contexts/AlertContext";
 import useCardLogic from "../custom Hooks/useCardLogic";
 import { useNavigate } from "react-router";
 import Button from "./Button";
+import { clientContext } from "../contexts/ClientContext";
 
 interface CardProps {
   card: CardType[];
@@ -18,6 +19,7 @@ const Card = ({ card, setCard }: CardProps) => {
   const { setActiveAlert } = useContext(AlertContext);
   const { incrementQuantity, decrementQuantity } = useCardLogic(setCard);
   const navigate = useNavigate();
+  const { setClient } = useContext(clientContext);
   const totalAmount = card.reduce((t, item) => {
     t += item.quantity * item.price;
     return Number(t.toFixed(2));
@@ -32,6 +34,7 @@ const Card = ({ card, setCard }: CardProps) => {
         clientName,
       })
       .then((res) => {
+        setClient(clientName);
         setActiveAlert({
           message: res.data.message,
           color: "green",
