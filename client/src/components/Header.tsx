@@ -54,12 +54,12 @@ const Header = () => {
             Add Product
           </NavLink>
           <NavLink
-            to="/reports"
+            to="/clients"
             className={({ isActive }) =>
               `hover:text-gray-300 ${isActive ? "text-yellow-400" : ""}`
             }
           >
-            Reports
+            clients
           </NavLink>
         </nav>
 

@@ -16,6 +16,7 @@ import ClientPayments from "./components/ClientPayments";
 import Clients from "./components/Clients";
 import ProtectedRoute from "./components/ProtectedRoute";
 import { clientContext } from "./contexts/ClientContext";
+import SalesByClient from "./components/SalesByClient";
 function App() {
   const { activeAlert } = useContext(AlertContext);
   const { client } = useContext(clientContext);
@@ -46,6 +47,7 @@ function App() {
             <Route path="invoice" element={<Invoice />} />
           </Route>
           <Route path="clients" element={<Clients />} />
+          <Route path={`sales/:${client}`} element={<SalesByClient />} />
           <Route path="*" element={<ErrorPage />} />
         </Routes>
       </div>
