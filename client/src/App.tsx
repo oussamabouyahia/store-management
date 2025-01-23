@@ -13,6 +13,7 @@ import Header from "./components/Header";
 import Invoice from "./components/Invoice";
 import "./App.css";
 import ClientPayments from "./components/ClientPayments";
+import Clients from "./components/Clients";
 import ProtectedRoute from "./components/ProtectedRoute";
 import { clientContext } from "./contexts/ClientContext";
 function App() {
@@ -44,6 +45,7 @@ function App() {
             <Route path="addProduct" element={<AddProduct />} />
             <Route path="invoice" element={<Invoice />} />
           </Route>
+          <Route path="clients" element={<Clients />} />
           <Route path="*" element={<ErrorPage />} />
         </Routes>
       </div>

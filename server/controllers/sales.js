@@ -125,7 +125,9 @@ const clientsList = async (req, res) => {
     });
 
     return clients.length
-      ? res.status(200).json(clients.map((client) => client.client_name))
+      ? res
+          .status(200)
+          .json({ clients: clients.map((client) => client.client_name) })
       : res.status(404).send("List of sales clients is empty!");
   } catch (error) {
     res
