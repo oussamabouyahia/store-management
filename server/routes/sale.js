@@ -7,4 +7,5 @@ router
   .get(saleController.salesDetails);
 router.get("/summary", saleController.salesSummaryList);
 router.get("/summary/:clientName", saleController.summaryByClient);
+router.get("/clients", saleController.clientsList);
 module.exports = router;

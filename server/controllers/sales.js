@@ -1,5 +1,6 @@
 const db = require("../models/index.js");
 const Product = db.products;
+const { Op, Sequelize } = require("sequelize");
 const Sale = db.sales;
 const SalesSummary = db.sales_summary;
 const sequelize = db.sequelize;
@@ -109,10 +110,34 @@ const summaryByClient = async (req, res) => {
       .json({ message: error.message || "internal server issue" });
   }
 };
+const clientsList = async (req, res) => {
+  try {
+    const clients = await SalesSummary.findAll({
+      attributes: [
+        [Sequelize.fn("DISTINCT", Sequelize.col("client_name")), "client_name"],
+      ],
+      where: {
+        client_name: {
+          [Op.ne]: null,
+        },
+      },
+      raw: true,
+    });
+
+    return clients.length
+      ? res.status(200).json(clients.map((client) => client.client_name))
+      : res.status(404).send("List of sales clients is empty!");
+  } catch (error) {
+    res
+      .status(error.status || 500)
+      .json({ message: error.message || "Internal server issue" });
+  }
+};
 
 module.exports = {
   processSale,
   salesDetails,
   salesSummaryList,
   summaryByClient,
+  clientsList,
 };

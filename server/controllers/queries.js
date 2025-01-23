@@ -17,5 +17,14 @@ WHERE
 
 GROUP BY 
   s.id, s.total_amount, s.client_name`,
+
+  salesByClient: `SELECT 
+    client_name,
+    GROUP_CONCAT(id ORDER BY sale_date ASC SEPARATOR ', ') AS sales,
+    GROUP_CONCAT(total_amount ORDER BY sale_date ASC SEPARATOR ', ') AS total_amounts,
+    GROUP_CONCAT(sale_date ORDER BY sale_date ASC SEPARATOR ', ') AS sale_dates
+FROM sales_summary
+WHERE client_name IS NOT NULL
+GROUP BY client_name;`,
 };
 module.exports = queries;

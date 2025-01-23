@@ -71,6 +71,9 @@ const ClientPayments = () => {
               <th className="p-3 text-left text-sm font-medium text-gray-700 border border-gray-300">
                 Date
               </th>
+              <th className="p-3 text-left text-sm font-medium text-gray-700 border border-gray-300">
+                Pay for this sale
+              </th>
             </tr>
           </thead>
           <tbody>
@@ -87,13 +90,21 @@ const ClientPayments = () => {
                   {sale.total_amount} TND
                 </td>
                 <td className="p-3 text-sm text-gray-700 border border-gray-300">
-                  {sale.total_paid} TND
+                  {sale.total_paid > 0 ? sale.total_paid : 0} TND
                 </td>
                 <td className="p-3 text-sm text-gray-700 border border-gray-300">
-                  {sale.remaining_unpaid} TND
+                  {sale.remaining_unpaid > 0 ? sale.remaining_unpaid : 0} TND
                 </td>
                 <td className="p-3 text-sm text-gray-700 border border-gray-300">
                   {new Date(sale.Date).toLocaleDateString()}
+                </td>
+                <td className="p-3 text-sm text-gray-700 border border-gray-300">
+                  <button
+                    className=" ml-5 bg-blue-500 hover:bg-green-600 text-white border border-green-300"
+                    onClick={() => {}}
+                  >
+                    pay
+                  </button>
                 </td>
               </tr>
             ))}
